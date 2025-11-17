@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { testConfig } from './config/test-config';
 
 /**
  * Read environment variables from file.
@@ -25,28 +26,62 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://localhost:3000',
+    
+    // Emulates the user locale.
+    locale: 'nl-NL',
+
+    // Emulates the user timezone.
+    timezoneId: 'Europe/Amsterdam',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+
+    viewport: { width: 1920, height: 1080 },
+    isMobile: false,
+    hasTouch: false,
+
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'KVNL - chromium',
+      testDir: './tests/kruidvat_nl',
+      use: { 
+        baseURL: testConfig.kruidvat_nl_baseUrl,
+        ...devices['Desktop Chrome'] },
     },
 
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: 'KVNL - Firefox',
+      testDir: './tests/kruidvat_nl',
+      use: { 
+        baseURL: testConfig.kruidvat_nl_baseUrl,
+        ...devices['Desktop Firefox'] },
     },
 
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      name: 'KVNL - Safari',
+      testDir: './tests/kruidvat_nl',
+      use: { 
+        baseURL: testConfig.kruidvat_nl_baseUrl,
+        ...devices['Desktop Safari'] },
+    },
+
+     {
+      name: 'KVB - chromium',
+      testDir: './tests/kruidvat_be',
+      use: { 
+        baseURL: testConfig.kruidvat_be_baseUrl,
+        ...devices['Desktop Chrome'] },
+    },
+
+     {
+      name: 'TP - chromium',
+      testDir: './tests/trekpleister',
+      use: { 
+        baseURL: testConfig.trekpleister_baseUrl,
+        ...devices['Desktop Chrome'] },
     },
 
     /* Test against mobile viewports. */
