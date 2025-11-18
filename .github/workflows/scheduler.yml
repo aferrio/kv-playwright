@@ -2,8 +2,8 @@ name: Playwright Scheduled Test
 
 on:
   schedule:
-    - cron: "*/2 * * * *"
-  workflow_dispatch:
+    - cron: "*/10 * * * *"  # Esegue ogni 10 minuti
+  workflow_dispatch:  # Permette l'esecuzione manuale
 
 jobs:
   run-test:
@@ -24,16 +24,40 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run tests
+      - name: Run all tests
         id: playwright-test
-        run: npx playwright test
+        run: npx playwright test --reporter=list
         continue-on-error: true
 
-      - name: Send Telegram notification on failure
-        if: steps.playwright-test.outcome == 'failure'
+      - name: Get test results
+        if: always()
+        id: test-results
         run: |
-          TIMESTAMP=$(date -u)
-          MESSAGE=$(printf "❌ Playwright Test Failed\n\nURL: https://www.trekpleister.nl\nText not found: 'Uit onze folder'\nTime: %s" "$TIMESTAMP")
+          if [ "${{ steps.playwright-test.outcome }}" = "failure" ]; then
+            echo "test_status=failed" >> $GITHUB_OUTPUT
+          else
+            echo "test_status=passed" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send Telegram notification on failure
+        if: steps.test-results.outputs.test_status == 'failed'
+        run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          REPO_URL="https://github.com/${{ github.repository }}"
+          RUN_URL="$REPO_URL/actions/runs/${{ github.run_id }}"
+          
+          MESSAGE=$(printf "❌ Playwright Tests Failed\n\n🔗 Repository: %s\n📊 Run Details: %s\n⏰ Time: %s\n\nAll tests executed every 10 minutes via GitHub Actions" "$REPO_URL" "$RUN_URL" "$TIMESTAMP")
+
+          curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d text="$MESSAGE" \
+            -d parse_mode="HTML"
+
+      - name: Send Telegram notification on success
+        if: steps.test-results.outputs.test_status == 'passed'
+        run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          MESSAGE=$(printf "✅ All Playwright Tests Passed\n\n⏰ Time: %s\n🔄 Next run in 10 minutes" "$TIMESTAMP")
 
           curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
