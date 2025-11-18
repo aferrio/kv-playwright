@@ -4,16 +4,11 @@ import { KruidvatNlHelpers } from '../../utils/kruidvat_nl-helpers';
 
 const TIMEOUT = 30000;
 
-test.beforeEach(async ({ page }) => {
-  await page.goto(`/`);
-
-  const helpers = new KruidvatNlHelpers(page);
-  await helpers.setupPage();
-});
-
 test('should display cart heading in shopping cart page', async ({ page }) => {
-  // Naviga alla pagina del carrello
-  await page.goto(`cart`);
+  const helpers = new KruidvatNlHelpers(page);
+  await helpers.navigateWithRetry('cart');
+  await helpers.setupPage();
+
   
   // Verifica che sia presente l'heading del carrello con il testo "Winkelmandje"
   const cartHeading = page.locator('h1.heading.m-bottom-medium.m-top-large.heading-simple--cart.heading--no-bullets.heading-simple.heading--one-word');
@@ -22,6 +17,9 @@ test('should display cart heading in shopping cart page', async ({ page }) => {
 });
 
 test('should display minicart', async ({ page }) => {
+  const helpers = new KruidvatNlHelpers(page);
+    await helpers.navigateWithRetry('/');
+    await helpers.setupPage();
 
   // Verifica che sia presente il minicart
   const minicart = page.locator('div.minicart');
@@ -29,6 +27,10 @@ test('should display minicart', async ({ page }) => {
 });
 
 test('should add NIVEA Crème product to cart', async ({ page }) => {
+    const helpers = new KruidvatNlHelpers(page);
+  await helpers.navigateWithRetry('nivea-creme/p/31306');
+  await helpers.setupPage();
+
   // Naviga alla pagina del prodotto NIVEA Crème
   await page.goto('nivea-creme/p/31306');
 

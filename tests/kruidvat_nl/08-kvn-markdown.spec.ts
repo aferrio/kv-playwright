@@ -4,10 +4,7 @@ import { KruidvatNlHelpers } from '../../utils/kruidvat_nl-helpers';
 const TIMEOUT = 30000;
 
 test.beforeEach(async ({ page }) => {
-  await page.goto(`/`);
-
-  const helpers = new KruidvatNlHelpers(page);
-  await helpers.setupPage();
+   const helpers = new KruidvatNlHelpers(page);
 });
 
 test('should display Kruidvat Derma product page correctly', async ({ page }) => {

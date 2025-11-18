@@ -1,8 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { KruidvatNlHelpers } from '../../utils/kruidvat_nl-helpers';
 
 test.beforeEach(async ({ page }) => {
- 
-  await page.goto(`/`);
+    const helpers = new KruidvatNlHelpers(page);
+    await helpers.navigateWithRetry('/');
+    await helpers.setupPage();
 });
 
 

@@ -5,9 +5,8 @@ import { KruidvatNlHelpers } from '../../utils/kruidvat_nl-helpers';
 const TIMEOUT = 60000;
 
 test.beforeEach(async ({ page }) => {
-  await page.goto(`/`);
-  
-    const helpers = new KruidvatNlHelpers(page);
+   const helpers = new KruidvatNlHelpers(page);
+    await helpers.navigateWithRetry('/');
     await helpers.setupPage();
   
 });

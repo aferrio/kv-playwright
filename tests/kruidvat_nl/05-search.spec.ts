@@ -1,9 +1,12 @@
 import { test, expect } from '@playwright/test';
+import { KruidvatNlHelpers } from '../../utils/kruidvat_nl-helpers';
 
 const TIMEOUT = 60000;
 
 test.beforeEach(async ({ page }) => {
-  await page.goto(`/`);
+   const helpers = new KruidvatNlHelpers(page);
+    await helpers.navigateWithRetry('/');
+    await helpers.setupPage();
 });
 
 
@@ -16,8 +19,16 @@ test('should search for nivea products', async ({ page }) => {
   await searchBox.fill('nivea');
   await searchBox.press('Enter');
   
-    
-  // Verifica che sia presente il testo con i risultati della ricerca
-  const searchResults = page.locator('text=producten gevonden met de zoekterm "nivea"');
-  await expect(searchResults).toBeVisible({ timeout: TIMEOUT });
+  // Verifica che sia presente l'header con i risultati della ricerca
+  const searchResultsHeader = page.locator('h1.plp-search-result__header:has-text("producten gevonden met de zoekterm \\"nivea\\"")');
+  await expect(searchResultsHeader).toBeVisible({ timeout: TIMEOUT });
+  
+  // Verifica che sia presente il numero di risultati
+  const searchResultsCount = page.locator('h1.plp-search-result__header span.text--success#searchAmountOfResults');
+  await expect(searchResultsCount).toBeVisible({ timeout: TIMEOUT });
+  
+  // Verifica che il conteggio sia un numero positivo
+  const countText = await searchResultsCount.textContent();
+  const count = parseInt(countText || '0');
+  expect(count).toBeGreaterThan(0);
 });
