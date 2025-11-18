@@ -15,7 +15,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 EMAIL_USER = "adriano.ferrio@gmail.com"  # Sostituisci con la tua email
-EMAIL_PASSWORD = "Yamantaka"  # Sostituisci con la tua password/app password
+#EMAIL_PASSWORD = "Yamantaka"  # Sostituisci con la tua password/app password
 EMAIL_PASSWORD = "nzqy gklg ofki idbp"
 TO_EMAIL = "adriano.ferrio@gmail.com"  # Sostituisci con l'email del destinatario
 

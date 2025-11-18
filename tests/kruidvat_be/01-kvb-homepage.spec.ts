@@ -6,29 +6,31 @@ test.beforeEach(async ({ page }) => {
   await page.goto(`/`);
 });
 
-test('has title', async ({ page }) => {
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Bestel gemakkelijk op Kruidvat.be | Kruidvat BE/);
-});
 
-test('should display the logo', async ({ page }) => {
+test('check the homepage content', async ({ page }) => {
+
+    // Expect a title "to contain" a substring.
+  await expect(page).toHaveTitle(/Bestel gemakkelijk op Kruidvat.be | Kruidvat BE/);
+
+    // Verifica la presenza del titolo in olandese
+  const dutchTitle = page.locator('h4.multilanguage-popup__title[role="heading"][aria-level="3"]:has-text("WELKOM OP KRUIDVAT.BE")');
+  await expect(dutchTitle).toBeVisible({timeout: 10000});
+  
+  // Verifica la presenza del titolo in francese
+  const frenchTitle = page.locator('h4.multilanguage-popup__title:has-text("BIENVENUE SUR KRUIDVAT.BE")');
+  await expect(frenchTitle).toBeVisible();
+
   // Sostituisci il selettore con quello corretto se necessario
   const logo = page.locator('img[title="Kruidvat Logo"]').first();
   await expect(logo).toBeVisible();
-});
 
-test('should display the top products header', async ({ page }) => {
   const topProductsHeader = page.locator('div[class*="top-products__content"]');
   await expect(topProductsHeader).toBeVisible();
-});
 
-test('should display main banner', async ({ page }) => {
-  const mainBanner = page.locator('div[class*="image-carousel__wrapper"]');
+   const mainBanner = page.locator('div[class*="image-carousel__wrapper"]');
   await expect(mainBanner).toBeVisible();
-});
 
-test('should display the privacy link inside the e2-footer', async ({ page }) => {
-  // Cerca il footer con classe "e2-footer"
+   // Cerca il footer con classe "e2-footer"
   const footer = page.locator('footer.e2-footer');
   await expect(footer).toBeVisible();
 
@@ -36,17 +38,6 @@ test('should display the privacy link inside the e2-footer', async ({ page }) =>
   const privacyLink = footer.getByRole('link', { name: 'Privacy' });
   await expect(privacyLink).toBeVisible();
 });
-
-test('should display language choice popup', async ({ page }) => {
-  // Verifica la presenza del titolo in olandese
-  const dutchTitle = page.locator('h4.multilanguage-popup__title[role="heading"][aria-level="3"]:has-text("WELKOM OP KRUIDVAT.BE")');
-  await expect(dutchTitle).toBeVisible({timeout: 10000});
-  
-  // Verifica la presenza del titolo in francese
-  const frenchTitle = page.locator('h4.multilanguage-popup__title:has-text("BIENVENUE SUR KRUIDVAT.BE")');
-  await expect(frenchTitle).toBeVisible();
-});
-
 
 
 
