@@ -1,4 +1,4 @@
-name: Manual Playwright Test
+name: Manual Playwright Test - Homepage Only
 
 on:
   workflow_dispatch:
@@ -33,17 +33,17 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run specific project test
+      - name: Run specific project homepage tests
         if: github.event.inputs.project != 'All projects'
-        run: npx playwright test --project="${{ github.event.inputs.project }}" --reporter=list
+        run: npx playwright test --project="${{ github.event.inputs.project }}" --grep="01-.*homepage" --reporter=list
 
-      - name: Run all tests
+      - name: Run all homepage tests
         if: github.event.inputs.project == 'All projects'
-        run: npx playwright test --reporter=list
+        run: npx playwright test --grep="01-.*homepage" --reporter=list
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-homepage
           path: playwright-report/

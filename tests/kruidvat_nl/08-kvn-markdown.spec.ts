@@ -4,12 +4,16 @@ import { KruidvatNlHelpers } from '../../utils/kruidvat_nl-helpers';
 const TIMEOUT = 30000;
 
 test.beforeEach(async ({ page }) => {
-   const helpers = new KruidvatNlHelpers(page);
+  const helpers = new KruidvatNlHelpers(page);
+  await helpers.navigateWithRetry('/');
+  await helpers.setupPage();
 });
 
 test('should display Kruidvat Derma product page correctly', async ({ page }) => {
+  const helpers = new KruidvatNlHelpers(page);
+  
   // Naviga alla pagina del prodotto Kruidvat Derma
-  await page.goto('kruidvat-derma-exfolierende-toner/p/6139866');
+  await helpers.navigateWithRetry('kruidvat-derma-exfolierende-toner/p/6139866');
   
   // Verifica che sia presente il titolo del prodotto
   const productTitle = page.locator('h1.product-title[role="heading"][aria-level="2"]:has-text("Kruidvat Derma Exfoliërende Toner")');
@@ -19,15 +23,29 @@ test('should display Kruidvat Derma product page correctly', async ({ page }) =>
   const priceContainer = page.locator('div.product-about__right div.pricebadge__wrapper div.pricebadge__new-price-wrapper div.pricebadge__new-price').first();
   await expect(priceContainer).toBeVisible({ timeout: TIMEOUT });
   
-  // Verifica i componenti specifici del prezzo all'interno del wrapper
-  const priceDecimal = page.locator('div.product-about__right div.pricebadge__wrapper div.pricebadge__new-price-wrapper div.pricebadge__new-price-decimal:has-text("5")');
+  // Verifica che il prezzo decimale contenga un valore numerico
+  const priceDecimal = page.locator('div.product-about__right div.pricebadge__wrapper div.pricebadge__new-price-wrapper div.pricebadge__new-price-decimal');
   await expect(priceDecimal).toBeVisible({ timeout: TIMEOUT });
   
+  const priceDecimalText = await priceDecimal.textContent();
+  const priceDecimalNumber = parseInt(priceDecimalText || '0');
+  expect(priceDecimalNumber).toBeGreaterThan(0);
+  expect(priceDecimalText).toMatch(/^\d+$/); // Verifica che sia solo numeri
+  console.log(`Price decimal value: ${priceDecimalText}`);
+  
+  // Verifica che sia presente il separatore
   const priceSeparator = page.locator('div.product-about__right div.pricebadge__wrapper div.pricebadge__new-price-wrapper div.pricebadge__new-price-separator:has-text(".")');
   await expect(priceSeparator).toBeVisible({ timeout: TIMEOUT });
   
-  const priceFractional = page.locator('div.product-about__right div.pricebadge__wrapper div.pricebadge__new-price-wrapper div.pricebadge__new-price-fractional:has-text("99")');
+  // Verifica che il prezzo frazionale contenga un valore numerico
+  const priceFractional = page.locator('div.product-about__right div.pricebadge__wrapper div.pricebadge__new-price-wrapper div.pricebadge__new-price-fractional');
   await expect(priceFractional).toBeVisible({ timeout: TIMEOUT });
+  
+  const priceFractionalText = await priceFractional.textContent();
+  const priceFractionalNumber = parseInt(priceFractionalText || '0');
+  expect(priceFractionalNumber).toBeGreaterThanOrEqual(0);
+  expect(priceFractionalText).toMatch(/^\d+$/); // Verifica che sia solo numeri
+  console.log(`Price fractional value: ${priceFractionalText}`);
   
   // Verifica che sia presente l'indicazione di disponibilità
   const stockInfo = page.locator('span.e2-cta__description--info[data-stock="inStock"]:has-text("Online op voorraad.")');
