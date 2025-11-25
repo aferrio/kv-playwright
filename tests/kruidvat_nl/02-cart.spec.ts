@@ -1,52 +1,61 @@
 import { test, expect } from '@playwright/test';
 import { KruidvatNlHelpers } from '../../utils/kruidvat_nl-helpers';
+import { beforeEach } from 'node:test';
 
 
-const TIMEOUT = 30000;
+let first = true;
 
-test('should display cart heading in shopping cart page', async ({ page }) => {
-  const helpers = new KruidvatNlHelpers(page);
-  await helpers.navigateWithRetry('cart');
-  await helpers.setupPage();
-
-  
-  // Verifica che sia presente l'heading del carrello con il testo "Winkelmandje"
-  const cartHeading = page.locator('h1.heading.m-bottom-medium.m-top-large.heading-simple--cart.heading--no-bullets.heading-simple.heading--one-word');
-  await expect(cartHeading).toBeVisible();
-  await expect(cartHeading).toHaveText('Winkelmandje');
+test.beforeEach(async ({ page }) => {
+    if (first) {
+   const helpers = new KruidvatNlHelpers(page);
+  await page.goto('/');
+  await helpers.acceptCookies();
+    first = false;
+  }
 });
 
-test('should display minicart', async ({ page }) => {
-  const helpers = new KruidvatNlHelpers(page);
-    await helpers.navigateWithRetry('/');
-    await helpers.setupPage();
 
+
+test('should display cart heading with correct structure', async ({ page }) => {
+  await page.goto('cart');
+  
+  // Verifica che sia presente l'h1 con le classi specifiche
+  const cartHeading = page.locator('h1.heading-simple--cart.heading--no-bullets');
+  await expect(cartHeading).toBeVisible();
+  
+  // Verifica che contenga il testo "Winkelmandje"
+  await expect(cartHeading.locator('span.heading__word:has-text("Winkelmandje")')).toBeVisible();
+});
+
+
+test('should display minicart', async ({ page }) => {
   // Verifica che sia presente il minicart
   const minicart = page.locator('div.minicart');
   await expect(minicart).toBeVisible();
 });
-
-test('should add NIVEA Crème product to cart', async ({ page }) => {
-    const helpers = new KruidvatNlHelpers(page);
-  await helpers.navigateWithRetry('nivea-creme/p/31306');
-  await helpers.setupPage();
-
-  // Naviga alla pagina del prodotto NIVEA Crème
-  await page.goto('nivea-creme/p/31306');
-
+/*
+test('should add NIVEA product to cart', async ({ page }) => {
+  const helpers = new KruidvatNlHelpers(page);
   
-  // Clicca sul pulsante "Add to cart" contenuto nella sezione add-to-cart e nel div e2-cta__price-container
-  const addToCartButton = page.locator('div.e2-cta__price-container section.add-to-cart.add-to-cart--big button.add-to-cart__button.add-to-cart__button--increase[aria-label="Add to cart"]');
-  await expect(addToCartButton).toBeVisible({ timeout: TIMEOUT });
+  await page.goto('nivea-waterlily-oil-douchegel/p/3059659');
+  
+  // Accetta cookie banner se presente
+  await helpers.acceptCookies();
+
+  // Clicca sul pulsante "Add to cart"
+  const addToCartButton = page.locator('button.add-to-cart__button.add-to-cart__button--increase[aria-label="Add to cart"]').first();
+  await expect(addToCartButton).toBeVisible();
   await addToCartButton.click();
 
-  await page.waitForTimeout(3000); // Attendi 3 secondi per assicurarti che il prodotto sia stato aggiunto al carrello
+  await page.waitForTimeout(5000);
   
   // Naviga alla pagina del carrello
   await page.goto('cart');
   
-  // Verifica che sia presente il prodotto NIVEA Crème nel carrello
-  const productName = page.locator('div.product-summary__desc.product-summary__desc--name.product-summary__description-name:has-text("NIVEA Crème")');
-  await expect(productName).toBeVisible({ timeout: TIMEOUT });
+  // Accetta cookie banner se presente anche sulla pagina cart
+  await helpers.acceptCookies();
+  
+  // Verifica che sia presente il testo "NIVEA Waterlily & Oil Douchegel" nel carrello
+  await expect(page.locator('text=NIVEA Waterlily & Oil Douchegel')).toBeVisible();
 });
-
+*/

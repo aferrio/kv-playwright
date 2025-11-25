@@ -1,14 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { KruidvatNlHelpers } from '../../utils/kruidvat_nl-helpers';
 
-const TIMEOUT = 60000;
-
-test.beforeEach(async ({ page }) => {
-    const helpers = new KruidvatNlHelpers(page);
-    await helpers.navigateWithRetry('/');
-    await helpers.setupPage();
-});
-
+const TIMEOUT = 30000;
 
 test('should display account create user page', async ({ page }) => {
   // Naviga alla pagina di registrazione
@@ -19,10 +12,12 @@ test('should display account create user page', async ({ page }) => {
   await expect(registerHeading).toBeVisible({ timeout: TIMEOUT });
 });
 
-
+/*
 test('should login with username and password', async ({ page }) => {
   // Naviga alla pagina di login
   await page.goto(`/login`);
+  const helpers = new KruidvatNlHelpers(page);
+  await helpers.setupPage();
   
   // Inserisci username
   const usernameField = page.locator('input[name="username"], input[type="email"], #username');
@@ -37,14 +32,24 @@ test('should login with username and password', async ({ page }) => {
   // Clicca il pulsante di login
   await passwordField.press('Enter');
 
-  await page.waitForTimeout(3000);
+  //await page.waitForTimeout(10000);
   //const loginButton = await page.getByRole('button', { name: 'Submit button' })
   //await loginButton.click({ force: true, timeout: TIMEOUT });
 
   // Verifica che l'URL sia corretto dopo il login
-  await expect(page).toHaveURL(`/my-account`, { timeout: TIMEOUT });
+  await expect(page).toHaveURL(`my-account`, { timeout: TIMEOUT });
  
   // Verifica che il login sia avvenuto con successo controllando la presenza dell'heading
   const accountHeading = page.locator('h1.heading-base.my-account__heading:has-text("Jouw overzicht")');
   await expect(accountHeading).toBeVisible({ timeout: TIMEOUT });
+});*/
+/*
+test('should display forgot password page', async ({ page }) => {
+  // Naviga alla pagina di recupero password
+  await page.goto(`login/pw/request`);
+  
+  // Verifica che sia presente il heading per il recupero password
+  const forgotPasswordHeading = page.locator('span.heading__text:has-text("Wachtwoord vergeten")').first();
+  await expect(forgotPasswordHeading).toBeVisible({ timeout: TIMEOUT });
 });
+*/

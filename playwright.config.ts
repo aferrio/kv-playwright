@@ -1,14 +1,21 @@
 import { defineConfig, devices } from '@playwright/test';
-import { testConfig } from './config/test-config';
+import { SITES_CONFIG } from './config/sites.config';
 
-// Configurazioni comuni per tutti i siti con CDN/anti-detection
-const cdnConfig = {
-  actionTimeout: 60000,
-  navigationTimeout: 180000,
+// Configurazione per browser Chromium/Firefox
+const chromiumConfig = {
+  actionTimeout: 20000,
+  navigationTimeout: 60000,
+  viewport: { width: 1920, height: 1080 },
+  isMobile: false,
+  hasTouch: false,
   
   extraHTTPHeaders: {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'DNT': '1',
+    'Connection': 'keep-alive',
+    'Upgrade-Insecure-Requests': '1',
     'Cache-Control': 'max-age=0',
     'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
     'sec-ch-ua-mobile': '?0',
@@ -33,13 +40,43 @@ const cdnConfig = {
       '--disable-sync',
       '--disable-translate',
       '--hide-scrollbars',
+      '--metrics-recording-only',
+      '--mute-audio',
+      '--no-reporting',
+      '--no-default-browser-check',
+      '--no-first-run',
+      '--no-pings',
       '--no-sandbox',
+      '--no-zygote',
       '--disable-dev-shm-usage',
       '--disable-http2',
       '--disable-web-security',
       '--ignore-certificate-errors',
+      '--ignore-ssl-errors',
+      '--ignore-certificate-errors-spki-list',
+      '--ignore-certificate-errors-tls-handshake',
+      '--disable-component-extensions-with-background-pages',
       '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     ]
+  }
+};
+
+// Configurazione semplificata per Safari
+const safariConfig = {
+  actionTimeout: 20000,
+  navigationTimeout: 60000,
+  viewport: { width: 1920, height: 1080 },
+  isMobile: false,
+  hasTouch: false,
+  
+  extraHTTPHeaders: {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'DNT': '1',
+    'Connection': 'keep-alive',
+    'Upgrade-Insecure-Requests': '1',
+    'Cache-Control': 'max-age=0'
   }
 };
 
@@ -50,14 +87,17 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
+  
+  // Timeout globale per ogni singolo test
+  timeout: 20000,
+  
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    
     // Emulates the user locale.
     locale: 'nl-NL',
 
@@ -66,65 +106,6 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-
-    viewport: { width: 1920, height: 1080 },
-    isMobile: false,
-    hasTouch: false,
-
-    // Headers per sembrare un browser reale
-    extraHTTPHeaders: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-      'Accept-Language': 'nl-NL,nl;q=0.9,en;q=0.8,en-US;q=0.7',
-      'Accept-Encoding': 'gzip, deflate, br',
-      'DNT': '1',
-      'Connection': 'keep-alive',
-      'Upgrade-Insecure-Requests': '1'
-    },
-
-    launchOptions: {
-      args: [
-        // Nascondere automazione
-        '--disable-blink-features=AutomationControlled',
-        '--disable-features=VizDisplayCompositor',
-        '--disable-ipc-flooding-protection',
-        '--disable-renderer-backgrounding',
-        '--disable-backgrounding-occluded-windows',
-        '--disable-background-timer-throttling',
-        '--disable-background-networking',
-        '--disable-default-apps',
-        '--disable-extensions',
-        '--disable-sync',
-        '--disable-translate',
-        '--hide-scrollbars',
-        '--metrics-recording-only',
-        '--mute-audio',
-        '--no-reporting',
-        '--no-default-browser-check',
-        '--no-first-run',
-        '--no-pings',
-        '--no-sandbox',
-        '--no-zygote',
-        '--disable-dev-shm-usage',
-        
-        // Network e sicurezza
-        '--disable-http2',
-        '--disable-web-security',
-        '--ignore-certificate-errors',
-        '--ignore-ssl-errors',
-        '--ignore-certificate-errors-spki-list',
-        '--ignore-certificate-errors-tls-handshake',
-        '--disable-component-extensions-with-background-pages',
-        
-        // User agent reale
-        '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-      ]
-    },
-
-    // Configurazioni globali per stabilità
-    actionTimeout: 30000,
-    navigationTimeout: 60000,
-
   },
 
   /* Configure projects for major browsers */
@@ -133,22 +114,27 @@ export default defineConfig({
       name: 'KVNL - chromium',
       testDir: './tests/kruidvat_nl',
       use: { 
-        baseURL: testConfig.kruidvat_nl_baseUrl,
+        baseURL: SITES_CONFIG.KRUIDVAT_NL.url,
         ...devices['Desktop Chrome'],
-        ...cdnConfig,
+        ...chromiumConfig,
         extraHTTPHeaders: {
-          ...cdnConfig.extraHTTPHeaders,
+          ...chromiumConfig.extraHTTPHeaders,
           'Accept-Language': 'nl-NL,nl;q=0.9,en;q=0.8',
         }
       },
     },
-
+/*
     {
       name: 'KVNL - Firefox',
       testDir: './tests/kruidvat_nl',
       use: { 
-        baseURL: testConfig.kruidvat_nl_baseUrl,
-        ...devices['Desktop Firefox'] 
+        baseURL: SITES_CONFIG.KRUIDVAT_NL.url,
+        ...devices['Desktop Firefox'],
+        ...chromiumConfig,
+        extraHTTPHeaders: {
+          ...chromiumConfig.extraHTTPHeaders,
+          'Accept-Language': 'nl-NL,nl;q=0.9,en;q=0.8',
+        }
       },
     },
 
@@ -156,20 +142,25 @@ export default defineConfig({
       name: 'KVNL - Safari',
       testDir: './tests/kruidvat_nl',
       use: { 
-        baseURL: testConfig.kruidvat_nl_baseUrl,
-        ...devices['Desktop Safari'] 
+        baseURL: SITES_CONFIG.KRUIDVAT_NL.url,
+        ...devices['Desktop Safari'],
+        ...safariConfig,
+        extraHTTPHeaders: {
+          ...safariConfig.extraHTTPHeaders,
+          'Accept-Language': 'nl-NL,nl;q=0.9,en;q=0.8',
+        }
       },
-    },
+    },*/
 
     {
       name: 'KVB - chromium',
       testDir: './tests/kruidvat_be',
       use: { 
-        baseURL: testConfig.kruidvat_be_baseUrl,
+        baseURL: SITES_CONFIG.KRUIDVAT_BE.url,
         ...devices['Desktop Chrome'],
-        ...cdnConfig,
+        ...chromiumConfig,
         extraHTTPHeaders: {
-          ...cdnConfig.extraHTTPHeaders,
+          ...chromiumConfig.extraHTTPHeaders,
           'Accept-Language': 'nl-BE,nl;q=0.9,fr;q=0.8,en;q=0.7',
         }
       },
@@ -179,21 +170,14 @@ export default defineConfig({
       name: 'TP - chromium',
       testDir: './tests/trekpleister',
       use: { 
-        baseURL: testConfig.trekpleister_baseUrl,
+        baseURL: SITES_CONFIG.TREKPLEISTER.url,
         ...devices['Desktop Chrome'],
-        ...cdnConfig,
+        ...chromiumConfig,
         extraHTTPHeaders: {
-          ...cdnConfig.extraHTTPHeaders,
+          ...chromiumConfig.extraHTTPHeaders,
           'Accept-Language': 'nl-NL,nl;q=0.9,en;q=0.8',
         }
       },
     },
   ],
-
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });

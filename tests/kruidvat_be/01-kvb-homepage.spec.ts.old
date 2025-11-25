@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 test('check the homepage content', async ({ page }) => {
 
     // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Bestel gemakkelijk op Kruidvat.be | Kruidvat BE/);
+  await expect(page).toHaveTitle(/Kruidvat Drogist/);
 
     // Verifica la presenza del titolo in olandese
   const dutchTitle = page.locator('h4.multilanguage-popup__title[role="heading"][aria-level="3"]:has-text("WELKOM OP KRUIDVAT.BE")');

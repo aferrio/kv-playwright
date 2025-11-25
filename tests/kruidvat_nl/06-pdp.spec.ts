@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 
-const TIMEOUT = 60000;
+const TIMEOUT = 20000;
 
 
 test('should display Voltaren product page correctly', async ({ page }) => {
