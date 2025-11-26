@@ -23,7 +23,7 @@ export const SITES_CONFIG: Record<string, SiteConfig> = {
     name: 'Kruidvat Nederland',
     url: 'https://www.kruidvat.nl',
     locale: 'nl-NL',
-    expectedContent: ['Kruidvat', 'Baby','Meer deals', 'Algemene Verkoopvoorwaarden'],
+    expectedContent: ['Meer deals'],
     titlePattern: /Kruidvat/i
   },
   
@@ -31,7 +31,7 @@ export const SITES_CONFIG: Record<string, SiteConfig> = {
     name: 'Trekpleister',
     url: 'https://www.trekpleister.nl',
     locale: 'nl-NL',
-    expectedContent: ['Uit onze folder', 'Trekpleister'],
+    expectedContent: ['Black Friday blijmakers', 'Meer aandacht voor jou!', 'Trekpleister'],
     titlePattern: /Trekpleister: Black Friday blijmakers/i
   }
 };

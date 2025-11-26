@@ -60,7 +60,7 @@ jobs:
               TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M UTC')
               
               # Crea messaggio di errore
-              MESSAGE="🚨 <b>FALLIMENTO TEST SITI</b>%0A%0A"
+              MESSAGE="🚨 <b>ERRORE NEI TEST FULL DI KV/TP</b>%0A%0A"
               MESSAGE+="❌ <b>Test Status:</b> ${{ steps.test-run.outcome }}%0A"
               MESSAGE+="⏰ <b>Timestamp:</b> $TIMESTAMP%0A%0A"
               MESSAGE+="🔗 <b>Dettagli:</b> <a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View Run</a>%0A%0A"
