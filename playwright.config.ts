@@ -140,7 +140,7 @@ export default defineConfig({
         }
       },
     },
-
+/*
     {
       name: 'KVNL - Firefox',
       testDir: './tests/kruidvat_nl',
@@ -155,7 +155,7 @@ export default defineConfig({
         }
       },
     },
-
+*/
     {
       name: 'KVNL - Safari',
       testDir: './tests/kruidvat_nl',

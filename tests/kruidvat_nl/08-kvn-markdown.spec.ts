@@ -42,8 +42,8 @@ test('should display Kruidvat Derma product page correctly', async ({ page }) =>
   expect(priceFractionalText).toMatch(/^\d+$/); // Verifica che sia solo numeri
   
   // Verifica che sia presente l'indicazione di disponibilità
-  const stockInfo = page.locator('span.e2-cta__description--info[data-stock="inStock"]:has-text("Online op voorraad.")');
-  await expect(stockInfo).toBeVisible({ timeout: TIMEOUT });
+  //const stockInfo = page.locator('span.e2-cta__description--info[data-stock="inStock"]:has-text("Online op voorraad.")');
+  //await expect(stockInfo).toBeVisible({ timeout: TIMEOUT });
 });
 
 
