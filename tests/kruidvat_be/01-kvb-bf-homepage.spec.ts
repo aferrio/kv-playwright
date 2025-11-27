@@ -16,14 +16,11 @@ test('should have correct page title', async ({ page }) => {
 });
 
 
-test('check the homepage content', async ({ page }) => {
+test('check we have full homepage', async ({ page }) => {
 
   // Sostituisci il selettore con quello corretto se necessario
   const logo = page.locator('img[title="Kruidvat Logo"]').first();
   await expect(logo).toBeVisible();
-
-  // Verifica che la pagina contenga il testo "Meer deals"
-  await expect(page.locator('text=Meer deals')).toBeVisible();
 
    // Cerca il footer con classe "e2-footer"
   const footer = page.locator('footer.e2-footer');
@@ -32,6 +29,17 @@ test('check the homepage content', async ({ page }) => {
   // Cerca il link "Privacy" all'interno del footer
   const privacyLink = footer.getByRole('link', { name: 'Privacy' });
   await expect(privacyLink).toBeVisible();
+});
+
+test('should display all expected content', async ({ page }) => {
+  // Seleziona il main content container
+  const mainContent = page.locator('main.e2-main');
+  await expect(mainContent).toBeVisible();
+  
+  // Verifica che tutti i testi definiti in expectedContent siano presenti all'interno del main
+  for (const content of siteConfig.expectedContent) {
+    await expect(mainContent.locator(`text=${content}`).first()).toBeVisible();
+  }
 });
 
 
