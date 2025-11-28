@@ -155,7 +155,7 @@ export default defineConfig({
         }
       },
     },
-*/
+
     {
       name: 'KVNL - Safari',
       testDir: './tests/kruidvat_nl',
@@ -170,7 +170,7 @@ export default defineConfig({
           'Accept-Language': 'nl-NL,nl;q=0.9,en;q=0.8',
         }
       },
-    },
+    },*/
 
     {
       name: 'KVB - chromium',
