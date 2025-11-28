@@ -44,12 +44,10 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           echo "🔍 Controllo risultati test..."
           if [ "${{ steps.test-run.outcome }}" != "success" ]; then
-            echo "❌ Test falliti - invio notifica Telegram e Slack"
-            # Telegram
+            echo "❌ Test falliti - invio notifica Telegram"
             if [ -n "$TELEGRAM_BOT_TOKEN" ] && [ -n "$TELEGRAM_CHAT_ID" ]; then
               TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M UTC')
               MESSAGE="🚨 <b>ERRORE NEI TEST FULL DI KV/TP</b>%0A%0A"
@@ -70,19 +68,6 @@ jobs:
               echo "✅ Notifica Telegram inviata"
             else
               echo "⚠️ Credenziali Telegram non configurate"
-            fi
-            # Slack
-            if [ -n "$SLACK_WEBHOOK_URL" ]; then
-              SLACK_MESSAGE=":rotating_light: *ERRORE NEI TEST KV/TP* :rotating_light:\n"
-              SLACK_MESSAGE="${SLACK_MESSAGE}*Test Status:* ${{ steps.test-run.outcome }}\n"
-              SLACK_MESSAGE="${SLACK_MESSAGE}*Browser:* chromium\n"
-              SLACK_MESSAGE="${SLACK_MESSAGE}*Timestamp:* $(date -u +'%Y-%m-%d %H:%M UTC')\n"
-              SLACK_MESSAGE="${SLACK_MESSAGE}<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|Dettagli Run>"
-              echo "📤 Invio messaggio Slack..."
-              curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"$SLACK_MESSAGE\"}" $SLACK_WEBHOOK_URL || echo "❌ Invio notifica Slack fallito"
-              echo "✅ Notifica Slack inviata"
-            else
-              echo "⚠️ Webhook Slack non configurato"
             fi
           else
             echo "✅ Tutti i test sono passati - nessuna notifica necessaria"
