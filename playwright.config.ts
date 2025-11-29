@@ -3,9 +3,9 @@ import { SITES_CONFIG } from './config/sites.config';
 
 // Configurazione per browser Chromium
 const chromiumConfig = {
-  actionTimeout: 20000,
-  navigationTimeout: 60000,
-  viewport: { width: 1920, height: 1080 },
+  actionTimeout: 10000,
+  navigationTimeout: 20000,
+  viewport: { width: 1500, height: 1080 },
   isMobile: false,
   hasTouch: false,
   
@@ -61,41 +61,6 @@ const chromiumConfig = {
   }
 };
 
-// Configurazione per Firefox (senza launchOptions specifici di Chromium)
-const firefoxConfig = {
-  actionTimeout: 30000,
-  navigationTimeout: 90000,
-  viewport: { width: 1920, height: 1080 },
-  isMobile: false,
-  hasTouch: false,
-  
-  extraHTTPHeaders: {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'DNT': '1',
-    'Connection': 'keep-alive',
-    'Upgrade-Insecure-Requests': '1',
-    'Cache-Control': 'max-age=0'
-  }
-};
-
-// Configurazione semplificata per Safari (timeout più lunghi)
-const safariConfig = {
-  actionTimeout: 30000, // Aumentato per Safari
-  navigationTimeout: 90000, // Aumentato per Safari
-  viewport: { width: 1920, height: 1080 },
-  isMobile: false,
-  hasTouch: false,
-  
-  extraHTTPHeaders: {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Connection': 'keep-alive',
-    'Upgrade-Insecure-Requests': '1'
-  }
-};
 
 export default defineConfig({
   testDir: './tests',
@@ -142,37 +107,7 @@ export default defineConfig({
         }
       },
     },
-/*
-    {
-      name: 'KVNL - Firefox',
-      testDir: './tests/kruidvat_nl',
-      timeout: 30000,
-      use: { 
-        baseURL: SITES_CONFIG.KRUIDVAT_NL.url,
-        ...devices['Desktop Firefox'],
-        ...firefoxConfig,
-        extraHTTPHeaders: {
-          ...firefoxConfig.extraHTTPHeaders,
-          'Accept-Language': 'nl-NL,nl;q=0.9,en;q=0.8',
-        }
-      },
-    },
 
-    {
-      name: 'KVNL - Safari',
-      testDir: './tests/kruidvat_nl',
-      timeout: 40000, // Timeout più lungo per Safari
-      retries: 2, // Più retry per Safari
-      use: { 
-        baseURL: SITES_CONFIG.KRUIDVAT_NL.url,
-        ...devices['Desktop Safari'],
-        ...safariConfig,
-        extraHTTPHeaders: {
-          ...safariConfig.extraHTTPHeaders,
-          'Accept-Language': 'nl-NL,nl;q=0.9,en;q=0.8',
-        }
-      },
-    },*/
 
     {
       name: 'KVB - chromium',

@@ -17,7 +17,7 @@ test('should display product list in makeup category', async ({ page }) => {
   const productList = page.locator('e2-product-list#productList');
   await expect(productList).toBeVisible();
 });
-/*
+
 test('should navigate to beauty category from Homepage', async ({ page }) => {
      
   // Trova e clicca il link Beauty che contiene l'e2-impression-tracker
@@ -33,7 +33,7 @@ test('should navigate to beauty category from Homepage', async ({ page }) => {
   await expect(heading).toBeVisible();
   await expect(heading).toHaveText('Beauty');
 });
-*/
+
 
 test('should display filters in zelfzorg category', async ({ page }) => {
   // Naviga alla categoria zelfzorg

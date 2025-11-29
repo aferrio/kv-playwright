@@ -45,8 +45,5 @@ export class KruidvatNlHelpers {
 
   async setupPage() {
     await this.acceptCookies();
-    
-    // Aspetta per permettere caricamento completo
-    await this.page.waitForTimeout(3000);
   }
 }
