@@ -18,6 +18,18 @@ test('should have correct page title', async ({ page }) => {
   await expect(page).toHaveTitle(siteConfig.titlePattern);
 });
 
+test('should display all expected content', async ({ page }) => {
+  // Seleziona il main content container
+  const mainContent = page.locator('main.e2-main');
+  await expect(mainContent).toBeVisible();
+  
+  // Verifica che tutti i testi definiti in expectedContent siano presenti all'interno del main
+  for (const content of siteConfig.expectedContent) {
+    await expect(mainContent.locator(`text=${content}`).first()).toBeVisible();
+  }
+});
+
+
 
 test('check correct homepage', async ({ page }) => {
 

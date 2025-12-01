@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { KruidvatNlHelpers } from '../../utils/kruidvat_nl-helpers';
+import { SITES_CONFIG } from '../../config/sites.config';
 
-
+const siteConfig = SITES_CONFIG.KRUIDVAT_NL;
 
 test('should display account create user page', async ({ page }) => {
   // Naviga alla pagina di registrazione
@@ -22,7 +23,7 @@ test('should login with username and password', async ({ page }) => {
   // Inserisci username
   const usernameField = page.locator('input[name="username"], input[type="email"], #username');
   await expect(usernameField).toBeVisible();
-  await usernameField.fill('a.ferrio@eu.aswatson.com');
+  await usernameField.fill(siteConfig.loginUser!);
   
   // Inserisci password
   const passwordField = page.locator('input[name="password"], input[type="password"], #password');

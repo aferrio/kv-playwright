@@ -8,6 +8,7 @@ export interface SiteConfig {
   locale: string;
   expectedContent: string[];
   titlePattern: RegExp;
+  loginUser?: string;
 }
 
 export const SITES_CONFIG: Record<string, SiteConfig> = {
@@ -15,24 +16,25 @@ export const SITES_CONFIG: Record<string, SiteConfig> = {
     name: 'Kruidvat Belgium',
     url: 'https://www.kruidvat.be/nl',
     locale: 'nl-BE',
-    expectedContent: ['Meer deals','Super Deals'],
+    expectedContent: ['Blog inspiratie','Weektoppers'],
     titlePattern: /Kruidvat/i
   },
   
   KRUIDVAT_NL: {
+    loginUser: 'a.ferrio@eu.aswatson.com',
     name: 'Kruidvat Nederland',
     url: 'https://www.kruidvat.nl',
     locale: 'nl-NL',
-    expectedContent: ['Meer deals'],
-    titlePattern: /Kruidvat/i
+    expectedContent: ['Kruidvat Club','Disclaimer'],
+    titlePattern: /Kruidvat/i    
   },
   
   TREKPLEISTER: {
     name: 'Trekpleister',
     url: 'https://www.trekpleister.nl',
     locale: 'nl-NL',
-    expectedContent: ['Black Friday blijmakers', 'Meer aandacht voor jou!', 'Trekpleister'],
-    titlePattern: /Trekpleister: Black Friday blijmakers/i
+    expectedContent: ['Uit onze folder', 'Meer aandacht voor jou!', 'Trekpleister'],
+    titlePattern: /Trekpleister drogist/i
   }
 };
 
