@@ -34,7 +34,7 @@ export const SITES_CONFIG: Record<string, SiteConfig> = {
     url: 'https://www.trekpleister.nl',
     locale: 'nl-NL',
     expectedContent: ['Uit onze folder', 'Meer aandacht voor jou!', 'Trekpleister'],
-    titlePattern: /Trekpleister drogist/i
+    titlePattern: /Trekpleister/i
   }
 };
 

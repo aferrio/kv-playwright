@@ -10,7 +10,7 @@ test('should display Voltaren product page correctly', async ({ page }) => {
   await expect(productTitle).toBeVisible();
   
   // Verifica che sia presente l'immagine del prodotto
-  const productImage = page.locator('img.preview.selected[src="/medias/sys_master/prd-images/h2c/h4b/34573720977438/prd-front-228226-1_600x600/prd-front-228226-1-600x600.jpg"][alt="Geneesmiddel - 20 stuks"]');
+  const productImage = page.locator('img.preview.selected[src="/medias/sys_master/prd-images/hff/hd5/45174978183198/prd-front-228226-1_600x600/prd-front-228226-1-600x600.jpg"][alt="Geneesmiddel - 20 stuks"]');
   await expect(productImage).toBeVisible();
   
   // Verifica che sia presente il pulsante con il testo "Advies online drogist" all'interno del div specifico
