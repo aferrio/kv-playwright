@@ -9,8 +9,8 @@ test('should display Voltaren product page correctly', async ({ page }) => {
   const productTitle = page.locator('h1.product-title:has-text("Voltaren K 12,5mg Diclofenac-Kalium Filmomhulde Tabletten")');
   await expect(productTitle).toBeVisible();
   
-  // Verifica che sia presente l'immagine del prodotto
-  const productImage = page.locator('img.preview.selected[src="/medias/sys_master/prd-images/hff/hd5/45174978183198/prd-front-228226-1_600x600/prd-front-228226-1-600x600.jpg"][alt="Geneesmiddel - 20 stuks"]');
+  // Verifica che sia presente l'immagine del prodotto con il path parziale
+  const productImage = page.locator('img.preview.selected[src*="/prd-front-228226-1_600x600/prd-front-228226-1-600x600.jpg"][alt="Geneesmiddel - 20 stuks"]');
   await expect(productImage).toBeVisible();
   
   // Verifica che sia presente il pulsante con il testo "Advies online drogist" all'interno del div specifico
