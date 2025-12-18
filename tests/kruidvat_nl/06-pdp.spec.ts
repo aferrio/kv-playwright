@@ -10,7 +10,7 @@ test('should display Voltaren product page correctly', async ({ page }) => {
   await expect(productTitle).toBeVisible();
   
   // Verifica che sia presente l'immagine del prodotto con il path parziale
-  const productImage = page.locator('img.preview.selected[src*="/prd-front-228226-1_600x600/prd-front-228226-1-600x600.jpg"][alt="Geneesmiddel - 20 stuks"]');
+  const productImage = page.locator('img.preview.selected[src*="/prd-front-228226-1_600x600/prd-front-228226-1-600x600.jpg"][alt="Productvoorbeeldafbeelding weergeven 1"]');
   await expect(productImage).toBeVisible();
   
   // Verifica che sia presente il pulsante con il testo "Advies online drogist" all'interno del div specifico
