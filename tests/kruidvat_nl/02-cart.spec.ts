@@ -33,6 +33,30 @@ test('should display minicart', async ({ page }) => {
   const minicart = page.locator('div.minicart');
   await expect(minicart).toBeVisible();
 });
+
+
+test('should add Baby Kadobox to cart and verify checkout page', async ({ page }) => {
+  
+  // Naviga direttamente al link di addtocart
+  await page.goto('/addtocart?productId=5954653&quantity=1');
+  
+  // Verifica che siamo nella pagina del carrello
+  await expect(page).toHaveURL(/.*cart/);
+  
+  // Verifica la presenza della descrizione del prodotto
+  const productDesc = page.locator('div.product-summary__desc.product-summary__desc--name.product-summary__description-name');
+  await expect(productDesc).toContainText('Kruidvat Gratis Baby Kadobox');
+  
+  // Verifica la presenza del pulsante "Verder naar bestellen"
+  const checkoutButton = page.locator('span.button__text:has-text("Verder naar bestellen")');
+  await expect(checkoutButton).toBeVisible();
+  
+  // Verifica la presenza del testo di consegna
+  const deliveryText = page.locator('span.cart-summary__text:has-text("Thuis- of in de winkel bezorgd")');
+  await expect(deliveryText).toBeVisible();
+});
+
+
 /*
 test('should add NIVEA product to cart', async ({ page }) => {
   const helpers = new KruidvatNlHelpers(page);

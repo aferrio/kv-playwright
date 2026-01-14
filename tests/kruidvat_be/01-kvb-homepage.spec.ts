@@ -13,6 +13,14 @@ test('should have correct page title', async ({ page }) => {
   // Verifica che il titolo corrisponda a quello configurato in sites.config.ts
   // titlePattern è già un RegExp, quindi lo passiamo direttamente
   await expect(page).toHaveTitle(siteConfig.titlePattern);
+
+      // Verifica la presenza del titolo in olandese
+  const dutchTitle = page.locator('h4.multilanguage-popup__title[role="heading"][aria-level="3"]:has-text("WELKOM OP KRUIDVAT.BE")');
+  await expect(dutchTitle).toBeVisible({timeout: 10000});
+  
+  // Verifica la presenza del titolo in francese
+  const frenchTitle = page.locator('h4.multilanguage-popup__title:has-text("BIENVENUE SUR KRUIDVAT.BE")');
+  await expect(frenchTitle).toBeVisible();
 });
 
 
@@ -41,7 +49,4 @@ test('should display all expected content', async ({ page }) => {
     await expect(mainContent.locator(`text=${content}`).first()).toBeVisible();
   }
 });
-
-
-
 

@@ -33,4 +33,14 @@ export class KruidvatBeHelpers {
     await this.selectLanguage();
     await this.acceptCookies();
   }
+
+  async simulateMouseMovement(delayMs: number = 500) {
+    // Simula movimento naturale del mouse
+    await this.page.mouse.move(100, 100);
+    await this.page.waitForTimeout(delayMs);
+    await this.page.mouse.move(300, 300, { steps: 10 });
+    await this.page.waitForTimeout(delayMs);
+    await this.page.mouse.move(500, 150, { steps: 10 });
+    await this.page.waitForTimeout(delayMs);
+  }
 }

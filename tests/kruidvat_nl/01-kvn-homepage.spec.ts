@@ -4,11 +4,20 @@ import { SITES_CONFIG } from '../../config/sites.config';
 
 const siteConfig = SITES_CONFIG.KRUIDVAT_NL;
 
+
+test.afterEach(async ({ page }) => {
+  // Delay tra un test e l'altro
+  await page.waitForTimeout(1000); // o 2000, 3000 a seconda della necessità
+});
+
+
 test.beforeEach(async ({ page }) => {
     await page.goto('/');
 
     const helpers = new KruidvatNlHelpers(page);
     await helpers.setupPage();
+      // Simula movimento del mouse
+    await helpers.simulateMouseMovement();
 });
 
 test('should have correct page title', async ({ page }) => {

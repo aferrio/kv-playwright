@@ -43,6 +43,18 @@ Questo progetto utilizza [Playwright](https://playwright.dev/) per monitorare lo
    ```bash
    npx playwright test --project=chromium
    ```
+5. Esegui un singolo test file:
+   ```bash
+   npx playwright test tests/kruidvat_nl/01-kvn-homepage.spec.ts
+   ```
+6. Esegui un singolo test per nome:
+   ```bash
+   npx playwright test --grep "should have correct page title"
+   ```
+7. Esegui i test in modalità headed (con browser visibile):
+   ```bash
+   npx playwright test --headed
+   ```
 
 ## Come funziona il monitoraggio automatico
 
